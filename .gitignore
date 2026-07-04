@@ -35,3 +35,40 @@ Thumbs.db
 
 # Data files
 data/*.pdf
+.env
+
+__pycache__
+
+*.pyc
+
+vectorstore/
+
+.vscode/
+
+.idea/
+
+# Virtual Environment
+venv/
+.venv/
+env/
+
+# Python cache
+*.pyo
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Build artifacts
+dist/
+build/
+*.egg-info/
+
+# Logs
+*.log
+
+# OS specific
+.DS_Store
+Thumbs.db
+
+# Data files
+data/*.pdf
