@@ -196,7 +196,3 @@ La interfaz es completamente responsive y funciona en:
 **Exportación no funciona:**
 - Verifica permisos de escritura
 - Asegúrate de que haya mensajes para exportar
-
-## 📞 Soporte
-
-Para issues o preguntas, contacta al equipo de desarrollo de Santos Pegasus.

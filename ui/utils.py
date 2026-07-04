@@ -1,10 +1,12 @@
 import requests
 import time
+import os
 from typing import Dict, List, Optional
 
-API_URL = "http://127.0.0.1:8000/ask"
-
-
+API_URL = os.getenv(
+    "API_URL",
+    "http://127.0.0.1:8000/ask"
+)
 class APIClient:
     """Cliente para comunicarse con la API FastAPI"""
     

@@ -55,6 +55,37 @@ Proporcionar respuestas precisas y contextualizadas sobre la documentación corp
 
 ## 🏗️ **Arquitectura**
 
+## 🏗️ Arquitectura
+
+```text
+                 👤 Usuario
+                      │
+                      ▼
+         ┌────────────────────────┐
+         │   Streamlit (UI)        │
+         │   Puerto 8501           │
+         └──────────┬──────────────┘
+                    │ HTTP
+                    ▼
+         ┌────────────────────────┐
+         │    FastAPI (API)        │
+         │    Puerto 8000          │
+         └──────────┬──────────────┘
+                    │
+                    ▼
+        ┌──────────────────────────┐
+        │ Retrieval-Augmented       │
+        │ Generation (LangChain)    │
+        └──────────┬────────────────┘
+                   │
+        ┌──────────┴───────────┐
+        ▼                      ▼
+   FAISS Vector DB       Gemini 2.5 Flash
+        ▲
+        │
+  Documentación PDF
+```
+
 ### **📊 Diagrama de Arquitectura del Sistema**
 
 ```mermaid
@@ -246,10 +277,27 @@ challenge-alura-agent/
 │
 ├── .env                             # Variables de entorno
 ├── .gitignore                       # Ignorados Git
-├── Dockerfile                       # Configuración Docker
+├── .dockerignore                    # Ignorados Docker
+├── Dockerfile.api                   # Imagen Docker para el backend FastAPI
+├── Dockerfile.streamlit             # Imagen Docker para la interfaz Streamlit
+├── docker-compose.yml               # Orquestación de los servicios (API + UI)
 ├── requirements.txt                 # Dependencias
-└── README.md                        # Este archivo
+├── test_llm.py                      # Script para validar la conexión y respuesta del LLM
+├── LICENSE                          # Licencia MIT
+└── README.md                        # Documentación principal
 ```
+
+---
+
+## 🐳 Contenedorización
+
+El proyecto está preparado para ejecutarse mediante Docker utilizando una arquitectura de dos servicios independientes:
+
+| Archivo | Descripción |
+|---------|-------------|
+| **Dockerfile.api** | Construye la imagen del backend basado en FastAPI, encargado del procesamiento de documentos, recuperación de información (RAG) y comunicación con Gemini. |
+| **Dockerfile.streamlit** | Construye la imagen de la interfaz web desarrollada con Streamlit, proporcionando un chat interactivo para consultar la documentación corporativa. |
+| **docker-compose.yml** | Orquesta ambos servicios, configura la red interna, los puertos expuestos y facilita el despliegue completo mediante un único comando (`docker compose up --build`). |
 
 ---
 
@@ -325,6 +373,8 @@ INFO:     Uvicorn running on http://127.0.0.1:8000
 INFO:     Application startup complete
 ```
 
+![Verificación del backend](public/init.png)
+
 #### **Terminal 2: Interfaz Streamlit**
 
 ```bash
@@ -363,6 +413,8 @@ curl -X POST http://127.0.0.1:8000/ask \
 }
 ```
 
+![Prueba del endpoint /ask](public/server.png)
+
 ---
 
 ## 🎨 **Interfaz de Usuario**
@@ -396,6 +448,8 @@ curl -X POST http://127.0.0.1:8000/ask \
 - ✅ Exportar a PDF (formato impresión)
 - ✅ Copiar al portapapeles
 
+![Vista principal de la UI](public/interfaz-1.png)
+
 ### **📱 Responsive Design**
 
 | Dispositivo | Resolución | Características |
@@ -404,6 +458,8 @@ curl -X POST http://127.0.0.1:8000/ask \
 | 📱 **Tablet** | 768px - 1023px | Sidebar 280px, layout optimizado |
 | 💻 **Desktop** | 1024px+ | Sidebar 350px, experiencia completa |
 | 🖥️ **Large Desktop** | 1440px+ | Chat hasta 900px, métricas grandes |
+
+![Chat con respuesta y fuentes](public/interfaz-2.png)
 
 ---
 
@@ -564,6 +620,9 @@ response = requests.post(
 export TRANSFORMERS_VERBOSITY=info
 uvicorn app.api:app --reload --log-level debug
 ```
+
+![Terminal con uvicorn y consultas](public/terminal.png)
+
 ---
 
 <div align="center">

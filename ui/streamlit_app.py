@@ -166,7 +166,6 @@ if question:
 # FOOTER
 # ============================================
 
-st.divider()
 st.markdown("""
 <div style='text-align: center; color: #666; font-size: 0.8rem;'>
     <strong>Santos Pegasus AI Assistant</strong> | 

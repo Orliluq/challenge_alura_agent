@@ -1,0 +1,36 @@
+version: "3.9"
+
+services:
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+
+    container_name: santos-api
+
+    ports:
+      - "8000:8000"
+
+    volumes:
+      - .:/app
+
+    restart: unless-stopped
+
+  streamlit:
+    build:
+      context: .
+      dockerfile: Dockerfile.streamlit
+
+    container_name: santos-ui
+
+    depends_on:
+      - api
+
+    ports:
+      - "8501:8501"
+
+    volumes:
+      - .:/app
+
+    restart: unless-stopped
