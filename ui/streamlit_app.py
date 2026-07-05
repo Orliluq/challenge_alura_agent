@@ -1,3 +1,9 @@
+"""
+Santos Pegasus AI - Aplicación principal Streamlit.
+
+Interfaz moderna y modular para asistente RAG con Gemini 2.5 Flash.
+"""
+
 import streamlit as st
 import sys
 from pathlib import Path
@@ -8,80 +14,73 @@ if str(PROJECT_ROOT) not in sys.path:
 
 from ui.utils import APIClient, MetricsTracker
 from ui.components import (
-    render_sidebar,
-    render_chat_message,
     render_header,
-    render_loading_spinner,
+    render_sidebar,
+    render_chat,
+    chat_input,
+    add_user_message,
+    add_assistant_message,
+    clear_chat as clear_chat_component,
+    render_empty_dashboard,
+    render_footer,
+    render_floating_actions,
+    AppIcons,
 )
-from ui.styles import (
-    apply_custom_styles,
-    get_custom_theme,
-)
-from ui.export import (
-    download_markdown,
-    download_pdf,
-)
+from ui.styles import apply_custom_styles
+from ui.export import download_markdown, download_pdf
+
 
 # ============================================
 # CONFIGURACIÓN
 # ============================================
 
 st.set_page_config(
-    page_title="Santos Pegasus AI",
-    page_icon="🤖",
+    page_title="Santos Pegasus AI | Asistente RAG",
+    page_icon="✨",
     layout="wide",
     initial_sidebar_state="expanded"
 )
 
-# Aplicar tema personalizado
-theme = get_custom_theme()
-st.config.set_option("theme.base", "dark")
-st.config.set_option("theme.primaryColor", theme["primaryColor"])
-
-# Aplicar estilos CSS
-apply_custom_styles()
 
 # ============================================
-# ESTADO DE LA APLICACIÓN
+# INICIALIZACIÓN DE ESTADO
 # ============================================
 
-# Detectar dispositivo móvil
-def detect_mobile():
-    """Detecta si el usuario está en un dispositivo móvil"""
+def initialize_session_state():
+    """Inicializa el estado de la aplicación."""
+    if "theme_mode" not in st.session_state:
+        st.session_state.theme_mode = "dark"
+    
+    if "is_mobile" not in st.session_state:
+        st.session_state.is_mobile = _detect_mobile()
+    
+    if "messages" not in st.session_state:
+        st.session_state.messages = []
+    
+    if "feedback" not in st.session_state:
+        st.session_state.feedback = {}
+    
+    if "api_client" not in st.session_state:
+        st.session_state.api_client = APIClient()
+    
+    if "metrics_tracker" not in st.session_state:
+        st.session_state.metrics_tracker = MetricsTracker()
+
+
+def _detect_mobile():
+    """Detecta si el usuario está en un dispositivo móvil."""
     try:
-        import streamlit as st
-        width = st.session_state.get('sidebar_state', 'expanded')
-        # Streamlit no tiene detección directa, usamos ancho de ventana
-        return st.session_state.get('client_width', 1200) < 768
-    except:
+        return st.session_state.get("client_width", 1200) < 768
+    except Exception:
         return False
 
-# Inicializar detección móvil
-if 'is_mobile' not in st.session_state:
-    st.session_state.is_mobile = detect_mobile()
-
-# Inicializar estado de mensajes
-if "messages" not in st.session_state:
-    st.session_state.messages = []
-
-# Inicializar estado de feedback
-if "feedback" not in st.session_state:
-    st.session_state.feedback = {}
-
-# Inicializar cliente API
-if "api_client" not in st.session_state:
-    st.session_state.api_client = APIClient()
-
-# Inicializar tracker de métricas
-if "metrics_tracker" not in st.session_state:
-    st.session_state.metrics_tracker = MetricsTracker()
 
 # ============================================
 # CALLBACKS
 # ============================================
 
 def clear_chat():
-    """Limpia el historial de chat"""
+    """Limpia el historial de chat."""
     st.session_state.messages = []
     st.session_state.feedback = {}
     st.session_state.metrics_tracker.reset()
@@ -89,7 +88,7 @@ def clear_chat():
 
 
 def export_chat_markdown():
-    """Exporta el chat a Markdown"""
+    """Exporta el chat a Markdown."""
     if st.session_state.messages:
         download_markdown(st.session_state.messages)
     else:
@@ -97,7 +96,7 @@ def export_chat_markdown():
 
 
 def export_chat_pdf():
-    """Exporta el chat a PDF (formato impresión)"""
+    """Exporta el chat a PDF (formato impresión)."""
     if st.session_state.messages:
         download_pdf(st.session_state.messages)
     else:
@@ -105,40 +104,18 @@ def export_chat_pdf():
 
 
 # ============================================
-# INTERFAZ PRINCIPAL
+# PROCESAMIENTO DE PREGUNTAS
 # ============================================
 
-# Renderizar header
-render_header()
-
-# Renderizar sidebar con métricas
-metrics = st.session_state.metrics_tracker.get_stats()
-render_sidebar(
-    metrics=metrics,
-    on_clear_chat=clear_chat,
-    on_export_markdown=export_chat_markdown,
-    on_export_pdf=export_chat_pdf
-)
-
-# ============================================
-# HISTORIAL DE CHAT
-# ============================================
-
-for i, message in enumerate(st.session_state.messages):
-    render_chat_message(message, i, st.session_state.feedback)
-
-# ============================================
-# INPUT DE USUARIO
-# ============================================
-
-question = st.chat_input("💬 Escribe tu pregunta sobre Santos Pegasus Soluciones...")
-
-if question:
+def process_question(question: str):
+    """
+    Procesa una pregunta del usuario.
+    
+    Args:
+        question: Pregunta del usuario
+    """
     # Agregar mensaje del usuario
-    st.session_state.messages.append({
-        "role": "user",
-        "content": question
-    })
+    add_user_message(question)
     
     # Mostrar mensaje del usuario
     with st.chat_message("user"):
@@ -146,8 +123,7 @@ if question:
     
     # Generar respuesta del asistente
     with st.chat_message("assistant"):
-        with st.spinner("🧠 Consultando documentos con Gemini 2.5 Flash..."):
-            # Llamar a la API
+        with st.spinner(f"Consultando documentos con Gemini 2.5 Flash..."):
             response = st.session_state.api_client.ask_question(question)
             
             answer = response.get("answer", "Sin respuesta.")
@@ -162,31 +138,79 @@ if question:
         
         # Mostrar fuentes si existen
         if sources:
-            with st.expander("📚 Documentos utilizados"):
+            with st.expander(f"{AppIcons.DOCUMENT} Documentos utilizados"):
                 for source in sources:
                     st.write("•", source)
             
-            # Mostrar tiempo de respuesta
-            st.caption(f"⏱️ Tiempo de respuesta: {elapsed_time:.2f}s")
+            st.caption(f"{AppIcons.TIME} Tiempo de respuesta: {elapsed_time:.2f}s")
     
     # Agregar respuesta al historial
-    st.session_state.messages.append({
-        "role": "assistant",
-        "content": answer,
-        "sources": sources
-    })
+    add_assistant_message(answer, sources)
     
     # Rerun para actualizar la UI
     st.rerun()
 
+
 # ============================================
-# FOOTER
+# APLICACIÓN PRINCIPAL
 # ============================================
 
-st.markdown("""
-<div style='text-align: center; color: #666; font-size: 0.8rem;'>
-    <strong>Santos Pegasus AI Assistant</strong> | 
-    Powered by Gemini 2.5 Flash + RAG | 
-    🚀 Construido con FastAPI + Streamlit | Desarrollado por Orli Dun 
-</div>
-""", unsafe_allow_html=True)
+def main():
+    """Función principal de la aplicación."""
+    # Inicializar estado
+    initialize_session_state()
+    
+    # Aplicar estilos
+    apply_custom_styles()
+    
+    # Renderizar header
+    render_header()
+    
+    # Renderizar sidebar
+    metrics = st.session_state.metrics_tracker.get_stats()
+    render_sidebar(
+        metrics=metrics,
+        on_clear_chat=clear_chat,
+        on_export_markdown=export_chat_markdown,
+        on_export_pdf=export_chat_pdf
+    )
+    
+    # Renderizar dashboard vacío si no hay mensajes
+    if not st.session_state.messages:
+        render_empty_dashboard(metrics)
+    
+    # Renderizar historial de chat
+    render_chat(
+        st.session_state.messages,
+        st.session_state.feedback,
+    )
+    
+    # Input de usuario
+    question = chat_input()
+    
+    if question:
+        process_question(question)
+    
+    # Footer
+    render_floating_actions(
+        on_clear_chat=clear_chat,
+        on_export=export_chat_markdown,
+    )
+    
+    st.markdown(
+        f"""
+        <div class="footer-card">
+            <strong>Santos Pegasus AI Assistant</strong> | 
+            Powered by Gemini 2.5 Flash + RAG | 
+            Construido con FastAPI + Streamlit | 
+            Desarrollado por Orli Dun
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+    
+    render_footer()
+
+
+if __name__ == "__main__":
+    main()
