@@ -1,41 +1,79 @@
 from pathlib import Path
+
 from pypdf import PdfReader
+
 from langchain_core.documents import Document
-from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain_community.embeddings import HuggingFaceEmbeddings
+from langchain_text_splitters import RecursiveCharacterTextSplitter
+from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_community.vectorstores import FAISS
 
+
+# ============================================
+# CONFIGURACIÓN
+# ============================================
+
 DATA_DIR = Path("data")
-VECTORSTORE_DIR = "vectorstore"
+VECTORSTORE_DIR = Path("vectorstore")
 
-# =========================
-# LOAD PDFS
-# =========================
-def load_documents():
-    docs = []
+EMBEDDING_MODEL = "sentence-transformers/all-MiniLM-L6-v2"
 
-    for pdf_file in DATA_DIR.glob("*.pdf"):
+
+# ============================================
+# CARGA DE DOCUMENTOS
+# ============================================
+
+def load_documents() -> list[Document]:
+    """
+    Lee todos los PDF de la carpeta data y los convierte en documentos.
+    """
+
+    if not DATA_DIR.exists():
+        raise FileNotFoundError(
+            f"No existe la carpeta '{DATA_DIR.resolve()}'"
+        )
+
+    pdf_files = list(DATA_DIR.glob("*.pdf"))
+
+    if not pdf_files:
+        raise FileNotFoundError(
+            "No se encontraron archivos PDF dentro de la carpeta data/"
+        )
+
+    documents = []
+
+    for pdf_file in pdf_files:
+
+        print(f"📄 Leyendo: {pdf_file.name}")
+
         reader = PdfReader(pdf_file)
 
         text = ""
+
         for page in reader.pages:
             text += page.extract_text() or ""
 
-        docs.append(
+        documents.append(
             Document(
                 page_content=text,
-                metadata={"source": pdf_file.name}
+                metadata={
+                    "source": pdf_file.name
+                }
             )
         )
 
-    return docs
+    print(f"\n✅ PDFs cargados: {len(documents)}")
+
+    return documents
 
 
-# =========================
-# MAIN INGEST PIPELINE
-# =========================
-def main():
-    documents = load_documents()
+# ============================================
+# CREAR CHUNKS
+# ============================================
+
+def split_documents(documents: list[Document]) -> list[Document]:
+    """
+    Divide los documentos en fragmentos para mejorar el RAG.
+    """
 
     splitter = RecursiveCharacterTextSplitter(
         chunk_size=1000,
@@ -44,80 +82,65 @@ def main():
 
     chunks = splitter.split_documents(documents)
 
+    print(f"✅ Chunks creados: {len(chunks)}")
+
+    return chunks
+
+
+# ============================================
+# CREAR VECTORSTORE
+# ============================================
+
+def create_vectorstore(chunks: list[Document]) -> None:
+    """
+    Genera el índice FAISS.
+    """
+
+    print("🧠 Cargando modelo de embeddings...")
+
     embeddings = HuggingFaceEmbeddings(
-        model_name="sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
+        model_name=EMBEDDING_MODEL,
+        model_kwargs={
+            "device": "cpu"
+        },
+        encode_kwargs={
+            "normalize_embeddings": True
+        }
     )
 
+    print("📦 Generando embeddings...")
+
     db = FAISS.from_documents(
-        chunks,
+        documents=chunks,
         embedding=embeddings
     )
 
-    db.save_local(VECTORSTORE_DIR)
+    VECTORSTORE_DIR.mkdir(exist_ok=True)
 
-    print("✅ Vectorstore creado correctamente")
+    db.save_local(str(VECTORSTORE_DIR))
 
-
-if __name__ == "__main__":
-    main()
-from pathlib import Path
-from pypdf import PdfReader
-from langchain_core.documents import Document
-from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain_community.embeddings import HuggingFaceEmbeddings
-from langchain_community.vectorstores import FAISS
-
-DATA_DIR = Path("data")
-VECTORSTORE_DIR = "vectorstore"
-
-# =========================
-# LOAD PDFS
-# =========================
-def load_documents():
-    docs = []
-
-    for pdf_file in DATA_DIR.glob("*.pdf"):
-        reader = PdfReader(pdf_file)
-
-        text = ""
-        for page in reader.pages:
-            text += page.extract_text() or ""
-
-        docs.append(
-            Document(
-                page_content=text,
-                metadata={"source": pdf_file.name}
-            )
-        )
-
-    return docs
+    print(f"✅ Vectorstore guardado en: {VECTORSTORE_DIR.resolve()}")
 
 
-# =========================
-# MAIN INGEST PIPELINE
-# =========================
+# ============================================
+# MAIN
+# ============================================
+
 def main():
+
+    print("=" * 60)
+    print("🚀 Iniciando proceso de indexación")
+    print("=" * 60)
+
     documents = load_documents()
 
-    splitter = RecursiveCharacterTextSplitter(
-        chunk_size=1000,
-        chunk_overlap=200
-    )
+    chunks = split_documents(documents)
 
-    chunks = splitter.split_documents(documents)
+    create_vectorstore(chunks)
 
-    embeddings = HuggingFaceEmbeddings(
-        model_name="sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
-    )
-
-    db = FAISS.from_documents(
-        chunks,
-        embedding=embeddings
-    )
-
-    db.save_local(VECTORSTORE_DIR)
-
-    print("✅ Vectorstore creado correctamente")
+    print("=" * 60)
+    print("🎉 Proceso completado correctamente")
+    print("=" * 60)
 
 
 if __name__ == "__main__":

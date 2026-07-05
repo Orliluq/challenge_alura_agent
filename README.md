@@ -470,8 +470,8 @@ curl -X POST http://127.0.0.1:8000/ask \
 | Servicio | URL |
 |----------|-----|
 | 💻 Frontend (Streamlit) | https://challengealurachiquiagent-1.streamlit.app/ |
-| 🌐 API (FastAPI) | https://santos-pegasus-api.onrender.com |
-| 📖 API Docs (Swagger) | https://santos-pegasus-api.onrender.com/docs |
+| 🌐 API (FastAPI) | https://challenge-alura-agent.onrender.com |
+| 📖 API Docs (Swagger) | https://challenge-alura-agent.onrender.com/docs |
 
 ---
 
