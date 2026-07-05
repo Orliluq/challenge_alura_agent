@@ -627,6 +627,16 @@ uvicorn app.api:app --reload --log-level debug
 
 ---
 
+## 📋 Resultados obtenidos
+
+![Frontend](public/frontend.png)
+
+![Backend](public/backend.png)
+
+![Consola](public/consola.png)
+
+---
+
 <div align="center">
 
 **⭐ Si te gusta este proyecto, dale una estrella! ⭐**
