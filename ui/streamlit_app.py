@@ -1,9 +1,26 @@
 import streamlit as st
-from utils import APIClient, MetricsTracker
-from components import render_sidebar, render_chat_message, render_header, render_loading_spinner
-from styles import apply_custom_styles, get_custom_theme
-from export import download_markdown, download_pdf
-from typing import Dict, List
+import sys
+from pathlib import Path
+
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
+from ui.utils import APIClient, MetricsTracker
+from ui.components import (
+    render_sidebar,
+    render_chat_message,
+    render_header,
+    render_loading_spinner,
+)
+from ui.styles import (
+    apply_custom_styles,
+    get_custom_theme,
+)
+from ui.export import (
+    download_markdown,
+    download_pdf,
+)
 
 # ============================================
 # CONFIGURACIÓN

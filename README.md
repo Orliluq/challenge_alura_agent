@@ -404,6 +404,8 @@ curl -X POST http://127.0.0.1:8000/ask \
   -d '{"question": "¿Qué tecnologías utiliza el backend?"}'
 ```
 
+> Documentación interactiva del Swagger de la API en `http://127.0.0.1:8000/docs`.
+
 **✅ Respuesta esperada:**
 ```json
 {
