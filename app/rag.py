@@ -1,42 +1,10 @@
 from dotenv import load_dotenv
 import os
 
-from langchain_google_genai import ChatGoogleGenerativeAI
-from langchain_huggingface import HuggingFaceEmbeddings
-from langchain_community.vectorstores import FAISS
-from langchain.chains import RetrievalQA
-from langchain_core.prompts import PromptTemplate
-
 load_dotenv()
 
 VECTORSTORE_DIR = "vectorstore"
 EMBEDDING_MODEL = "sentence-transformers/all-MiniLM-L6-v2"
-
-# ============================================================
-# PROMPT
-# ============================================================
-
-prompt = PromptTemplate(
-    input_variables=["context", "question"],
-    template="""
-Eres un asistente corporativo de Santos Pegasus Soluciones.
-
-Responde únicamente utilizando la información proporcionada
-en el contexto.
-
-Si la respuesta no aparece en el contexto responde exactamente:
-
-"No tengo información suficiente para responder esa pregunta."
-
-Contexto:
-{context}
-
-Pregunta:
-{question}
-
-Respuesta:
-"""
-)
 
 # ============================================================
 # CACHE GLOBAL
@@ -54,9 +22,37 @@ def get_qa_chain():
 
     if qa_chain is None:
 
+        from langchain_google_genai import ChatGoogleGenerativeAI
+        from langchain_huggingface import HuggingFaceEmbeddings
+        from langchain_community.vectorstores import FAISS
+        from langchain.chains import RetrievalQA
+        from langchain_core.prompts import PromptTemplate
+
         print("=" * 60)
         print("🚀 Inicializando RAG...")
         print("=" * 60)
+
+        prompt = PromptTemplate(
+            input_variables=["context", "question"],
+            template="""
+Eres un asistente corporativo de Santos Pegasus Soluciones.
+
+Responde únicamente utilizando la información proporcionada
+en el contexto.
+
+Si la respuesta no aparece en el contexto responde exactamente:
+
+"No tengo información suficiente para responder esa pregunta."
+
+Contexto:
+{context}
+
+Pregunta:
+{question}
+
+Respuesta:
+"""
+        )
 
         embeddings = HuggingFaceEmbeddings(
             model_name=EMBEDDING_MODEL,

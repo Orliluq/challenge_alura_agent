@@ -1,7 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.models import QuestionRequest, QuestionResponse
-from app.rag import ask_question
 
 app = FastAPI(
     title="Santos Pegasus AI Agent",
@@ -26,7 +25,13 @@ def root():
         "status": "ok"
     }
 
+@app.get("/health")
+def health():
+    return {"status": "ok"}
+
 @app.post("/ask", response_model=QuestionResponse)
 def ask(payload: QuestionRequest):
+    from app.rag import ask_question
+
     response = ask_question(payload.question)
     return QuestionResponse(**response)
