@@ -15,9 +15,9 @@ def render_footer():
 
     st.markdown("---")
 
-    _, col2, _ = st.columns([3, 2, 3])
+    # _, col2, _ = st.columns([3, 2, 3])
 
-    with col2:
+    with st.container():
         st.caption(
             f"© {current_year} **{APP_NAME}** Desarrollado con ❤️ por **Orli Dun**"
         )

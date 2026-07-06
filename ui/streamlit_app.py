@@ -178,18 +178,7 @@ def main():
         st.session_state.feedback,
     )
     
-    # Input de usuario
-    question = chat_input()
-    
-    if question:
-        process_question(question)
-    
-    # Footer
-    render_floating_actions(
-        on_clear_chat=clear_chat,
-        on_export=export_chat_markdown,
-    )
-    
+    # Footer (antes del input para que quede debajo en el flujo del documento)
     st.markdown(
         f"""
         <div class="footer-card">
@@ -200,6 +189,12 @@ def main():
     )
     
     render_footer()
+    
+    # Input de usuario (se fija en la parte inferior)
+    question = chat_input()
+    
+    if question:
+        process_question(question)
 
 
 if __name__ == "__main__":

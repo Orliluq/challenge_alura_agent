@@ -1,5 +1,6 @@
 from dotenv import load_dotenv
 import os
+from pathlib import Path
 
 load_dotenv()
 
@@ -32,17 +33,25 @@ def get_qa_chain():
         print("🚀 Inicializando RAG...")
         print("=" * 60)
 
+        # Validar que el vectorstore existe
+        vectorstore_path = Path(VECTORSTORE_DIR)
+        if not vectorstore_path.exists():
+            raise FileNotFoundError(
+                f"El directorio de vectorstore '{VECTORSTORE_DIR}' no existe. "
+                "Ejecuta primero el script de ingestión para crear los índices."
+            )
+
         prompt = PromptTemplate(
             input_variables=["context", "question"],
             template="""
 Eres un asistente corporativo de Santos Pegasus Soluciones.
 
-Responde únicamente utilizando la información proporcionada
-en el contexto.
+Prioriza responder utilizando la información proporcionada en el contexto.
+Si el contexto contiene información relevante, úsala para responder.
 
-Si la respuesta no aparece en el contexto responde exactamente:
-
-"No tengo información suficiente para responder esa pregunta."
+Si el contexto NO contiene suficiente información para responder,
+puedes usar tu conocimiento general sobre Santos Pegasus Soluciones,
+pero siempre menciona que la respuesta no está basada en la documentación.
 
 Contexto:
 {context}
@@ -76,7 +85,7 @@ Respuesta:
 
         retriever = db.as_retriever(
             search_kwargs={
-                "k": 2
+                "k": 4
             }
         )
 

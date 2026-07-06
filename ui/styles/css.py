@@ -18,6 +18,7 @@ def get_base_css() -> str:
         box-sizing: border-box;
         margin: 0;
         padding: 0;
+        font-family:"Fira Code", monospace !important;
     }
     
     body {
@@ -142,6 +143,7 @@ def get_hero_css() -> str:
         position: relative;
         overflow: hidden;
         isolation: isolate;
+        text-align: center;
     }
     
     .hero-shell::before {
@@ -196,6 +198,8 @@ def get_hero_css() -> str:
         flex-wrap: wrap;
         gap: 0.6rem;
         margin-top: 0.9rem;
+        align-items: center;
+        justify-content: center;
     }
     
     .hero-pill {
@@ -231,6 +235,7 @@ def get_dashboard_css() -> str:
         grid-template-columns: repeat(3, minmax(0, 1fr));
         gap: 0.8rem;
         margin: 0 0 1rem 0;
+        text-align: center;
     }
     
     .dashboard-card {
@@ -241,6 +246,7 @@ def get_dashboard_css() -> str:
         box-shadow: 0 12px 30px var(--shadow);
         backdrop-filter: blur(var(--glass-blur));
         transition: transform 0.18s ease, box-shadow 0.18s ease;
+        text-align: center;
     }
     
     .dashboard-card:hover {
@@ -317,45 +323,201 @@ def get_dashboard_css() -> str:
 
 
 def get_chat_css() -> str:
-
     return """
-    /* ============================================
+    /* ==================================================
        CHAT
-       ============================================ */
-    
-    .stChatMessage {
-        background: linear-gradient(135deg, var(--glass-bg), rgba(255, 255, 255, 0.04));
-        border: 1px solid var(--glass-border);
-        border-radius: 20px;
-        padding: 0.95rem 1rem;
-        margin: 0.7rem 0;
-        box-shadow: 0 16px 38px var(--shadow);
-        backdrop-filter: blur(var(--glass-blur));
-        animation: bounceIn 0.45s ease both;
-    }
-    
-    [data-testid="stChatMessage"] [data-testid="chatAvatar"] {
-        background: var(--gradient-primary);
-        border: none;
-    }
-    
-    .stChatInput {
+    =================================================== */
+
+    /* -----------------------------
+       Mensajes
+    ----------------------------- */
+
+    [data-testid="stChatMessage"]{
+        background: var(--bg-card);
         border: 1px solid var(--border);
-        border-radius: 16px;
-        background: var(--glass-bg);
-        box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.04);
+        border-radius: 22px;
+        backdrop-filter: blur(18px);
+        -webkit-backdrop-filter: blur(18px);
+        box-shadow: 0 10px 30px var(--shadow);
+        padding: 1rem;
+        margin: .8rem 0;
+        animation: fadeIn .35s ease;
     }
-    
-    .stChatInput textarea {
-        color: var(--text-main) !important;
+
+    [data-testid="chatAvatar"]{
+        background: var(--primary) !important;
+        border-radius:50%;
     }
-    
-    .streamlit-expanderHeader {
-        border-radius: 12px;
-        border: 1px solid var(--border);
-        background: var(--glass-bg);
+
+    /* -----------------------------
+       CONTENEDOR DEL CHAT INPUT
+    ----------------------------- */
+
+    [data-testid="stBottomBlockContainer"]{
+        background: transparent !important;
+        border:none !important;
+        box-shadow:none !important;
     }
-"""
+
+    .stChatInput{
+        background: transparent !important;
+        border:none !important;
+        box-shadow:none !important;
+    }
+
+    /* BaseWeb */
+
+    .stChatInput [data-baseweb="textarea"]{
+        background: var(--bg-card) !important;
+        border:1px solid var(--border) !important;
+        border-radius:24px !important;
+        backdrop-filter:blur(22px);
+        -webkit-backdrop-filter:blur(22px);
+        padding:.45rem .8rem;
+        box-shadow:
+            0 10px 30px var(--shadow),
+            inset 0 1px 0 rgba(255,255,255,.04);
+        transition:.25s;
+    }
+
+    .stChatInput [data-baseweb="base-input"]{
+        background:transparent !important;
+        border:none !important;
+        box-shadow:none !important;
+    }
+
+    textarea[data-testid="stChatInputTextArea"]{
+        background:transparent !important;
+        color:var(--text-main) !important;
+        border:none !important;
+        box-shadow:none !important;
+        font-family:"Fira Code", monospace !important;
+        font-size:.96rem;
+        line-height:1.6;
+        resize:none !important;
+        padding:.15rem 0 !important;
+
+    }
+
+    textarea[data-testid="stChatInputTextArea"]::placeholder{
+        color:var(--text-muted) !important;
+    }
+
+    /* Hover */
+
+    .stChatInput [data-baseweb="textarea"]:hover{
+        border-color:var(--primary) !important;
+
+    }
+
+    /* Focus */
+    .stChatInput [data-baseweb="textarea"]:focus-within{
+        border-color:var(--primary) !important;
+        box-shadow:
+            0 0 0 3px color-mix(in srgb, var(--primary) 20%, transparent),
+            0 10px 30px var(--shadow);
+
+    }
+
+    /* -----------------------------
+       BOTÓN ENVIAR
+    ----------------------------- */
+
+    button[data-testid="stChatInputSubmitButton"]{
+        width:44px;
+        height:44px;
+        border:none !important;
+        border-radius:50% !important;
+        background:linear-gradient(
+            135deg,
+            var(--primary),
+            var(--accent)
+        ) !important;
+        transition:.25s;
+        box-shadow:0 8px 20px rgba(0,0,0,.25);
+
+    }
+
+    button[data-testid="stChatInputSubmitButton"]:hover{
+        transform:scale(1.08);
+        filter:brightness(1.08);
+
+    }
+
+    button[data-testid="stChatInputSubmitButton"] svg{
+        fill:white !important;
+        color:white !important;
+
+    }
+
+    button[data-testid="stChatInputSubmitButton"]:disabled{
+        opacity:.45;
+        cursor:not-allowed;
+
+    }
+
+    /* -----------------------------
+       EXPANDER
+    ----------------------------- */
+
+    .streamlit-expanderHeader{
+        background:var(--bg-card) !important;
+        border:1px solid var(--border);
+        border-radius:16px;
+
+    }
+
+    /* -----------------------------
+       Responsive
+    ----------------------------- */
+
+    @media(max-width:768px){
+        .stChatInput [data-baseweb="textarea"]{
+            border-radius:20px !important;
+            padding:.35rem .65rem;
+        }
+
+        textarea[data-testid="stChatInputTextArea"]{
+            font-size:.90rem;
+
+        }
+
+        button[data-testid="stChatInputSubmitButton"]{
+            width:40px;
+            height:40px;
+
+        }
+
+    }
+
+    /* -----------------------------
+       Animación
+    ----------------------------- */
+
+    @keyframes fadeIn{
+        from{
+            opacity:0;
+            transform:translateY(8px);
+        }
+
+        to{
+            opacity:1;
+            transform:translateY(0);
+        }
+
+    }
+
+    [data-testid="stBottomBlockContainer"]{
+        background:transparent !important;
+        padding-bottom:1rem;
+    }
+
+    .stChatInput{
+        max-width:900px;
+        margin:auto;
+    }
+
+    """
 
 
 def get_buttons_css() -> str:
@@ -433,10 +595,10 @@ def get_footer_css() -> str:
     
     .footer-card {
         margin-top: 1.3rem;
+        margin-bottom: 5rem;  
         padding: 0.8rem 1rem;
         text-align: center;
         border-radius: 16px;
-        background: var(--glass-bg);
         border: 1px solid var(--border);
         color: var(--text-muted) !important;
         font-size: 0.9rem;
@@ -458,6 +620,10 @@ def get_footer_css() -> str:
         width: 40px !important;
         height: 40px !important;
         box-shadow: 0 10px 26px rgba(255, 107, 53, 0.28) !important;
+    }
+
+    .stCaption {
+        color: var(--text-muted) !important;
     }
 """
 
@@ -496,7 +662,10 @@ def get_utilities_css() -> str:
        ============================================ */
     
     hr {
-        border-color: var(--border);
+    border-color: var(--border);
+    border-top: 1px solid var(--border);
+    background: transparent;
+    margin: 1.5rem 0;
     }
     
     .welcome-card {
@@ -555,7 +724,7 @@ def get_responsive_css() -> str:
         
         .stChatMessage {
             padding: 0.8rem;
-            margin: 0.45rem 0;
+            margin: 0.7rem 0; 
         }
         
         [data-testid="stMetricValue"] {
@@ -564,11 +733,21 @@ def get_responsive_css() -> str:
         
         .dashboard-grid {
             grid-template-columns: 1fr;
+            gap: 1rem;
+        }
+
+        .dashboard-card {
+            margin: 0.5rem 0;
+        }
+        
+        .stButton > button {
+            margin: 0.4rem 0 !important;
         }
         
         .floating-actions {
             right: 0.8rem;
             bottom: 0.8rem;
+            gap: 0.6rem;
         }
         
         .hero-pills {
@@ -588,10 +767,12 @@ def get_responsive_css() -> str:
         
         .dashboard-card {
             padding: 0.8rem;
+            margin: 0.6rem 0; 
         }
         
         .stChatMessage {
             padding: 0.7rem;
+            margin: 0.6rem 0;
             border-radius: 16px;
         }
     }
@@ -601,6 +782,26 @@ def get_responsive_css() -> str:
             flex-direction: column;
         }
     }
+
+    /* Tablets (768px - 1024px) */
+    @media (max-width: 1024px) and (min-width: 768px) {
+    .main .block-container {
+        padding-left: 1.2rem;
+        padding-right: 1.2rem;
+    }
+    
+    .hero-shell {
+        padding: 1.5rem;
+    }
+    
+    .hero-shell h1 {
+        font-size: 1.8rem;
+    }
+    
+    .dashboard-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
 """
 
 

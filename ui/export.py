@@ -1,6 +1,8 @@
 from typing import List, Dict
 from datetime import datetime
 import streamlit as st
+from io import BytesIO
+from fpdf import FPDF
 
 
 def export_to_markdown(messages: List[Dict]) -> str:
@@ -47,25 +49,63 @@ def export_to_markdown(messages: List[Dict]) -> str:
     return markdown
 
 
-def export_to_pdf(messages: List[Dict]) -> str:
-
-    # Para PDF, usamos el mismo formato Markdown pero con estilos adicionales
-    markdown = export_to_markdown(messages)
+def export_to_pdf(messages: List[Dict]) -> bytes:
+    """
+    Exporta el historial de chat a formato PDF
     
-    # Agregar estilos CSS para impresión
-    pdf_styles = """
-<style>
-    @media print {
-        body { font-family: Arial, sans-serif; }
-        h1 { color: #1E88E5; }
-        h2 { color: #1565C0; border-bottom: 1px solid #ccc; }
-        code { background-color: #f5f5f5; padding: 2px 4px; }
-        pre { background-color: #f5f5f5; padding: 10px; overflow-x: auto; }
-    }
-</style>
-"""
+    Args:
+        messages: Lista de mensajes del chat
+        
+    Returns:
+        Bytes del PDF generado
+    """
+    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     
-    return pdf_styles + markdown
+    # Crear PDF
+    pdf = FPDF()
+    pdf.add_page()
+    
+    # Configurar fuente (usamos fuentes estándar de FPDF)
+    pdf.set_font("Arial", "B", 16)
+    pdf.cell(0, 10, "Santos Pegasus AI - Chat Export", 0, 1, "C")
+    
+    pdf.set_font("Arial", "", 10)
+    pdf.cell(0, 8, f"Fecha: {timestamp}", 0, 1, "C")
+    pdf.cell(0, 8, f"Total de mensajes: {len(messages)}", 0, 1, "C")
+    pdf.ln(10)
+    
+    # Agregar mensajes
+    for i, message in enumerate(messages, 1):
+        role_name = "Usuario" if message["role"] == "user" else "Asistente"
+        
+        pdf.set_font("Arial", "B", 12)
+        pdf.cell(0, 10, f"{role_name} - Mensaje {i}", 0, 1)
+        
+        pdf.set_font("Arial", "", 10)
+        # Dividir texto largo en múltiples líneas
+        content = message['content']
+        pdf.multi_cell(0, 7, content)
+        
+        if message["role"] == "assistant" and message.get("sources"):
+            pdf.ln(5)
+            pdf.set_font("Arial", "B", 10)
+            pdf.cell(0, 7, "Fuentes utilizadas:", 0, 1)
+            pdf.set_font("Arial", "", 9)
+            for source in message["sources"]:
+                pdf.cell(0, 6, f"- {source}", 0, 1)
+        
+        pdf.ln(10)
+    
+    # Footer
+    pdf.ln(10)
+    pdf.set_font("Arial", "I", 8)
+    pdf.cell(0, 5, "Exportado desde Santos Pegasus AI Agent", 0, 1, "C")
+    pdf.cell(0, 5, f"Generado automaticamente el {timestamp}", 0, 1, "C")
+    
+    # Generar bytes
+    pdf_bytes = pdf.output(dest="S").encode("latin-1")
+    
+    return pdf_bytes
 
 
 def download_markdown(messages: List[Dict], filename: str = None):
@@ -87,15 +127,15 @@ def download_markdown(messages: List[Dict], filename: str = None):
 def download_pdf(messages: List[Dict], filename: str = None):
 
     if not filename:
-        filename = f"santos_pegasus_chat_{datetime.now().strftime('%Y%m%d_%H%M%S')}.md"
+        filename = f"santos_pegasus_chat_{datetime.now().strftime('%Y%m%d_%H%M%S')}.pdf"
     
-    pdf_content = export_to_pdf(messages)
+    pdf_bytes = export_to_pdf(messages)
     
     st.download_button(
-        label="📥 Descargar para imprimir (PDF)",
-        data=pdf_content,
+        label="📥 Descargar PDF",
+        data=pdf_bytes,
         file_name=filename,
-        mime="text/markdown",
+        mime="application/pdf",
         use_container_width=True
     )
 
