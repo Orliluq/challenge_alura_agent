@@ -5,10 +5,10 @@ def get_base_css() -> str:
   
     return """
     /* ============================================
-       FUENTES - Fira Code
+       FUENTES - Roboto
        ============================================ */
     
-    @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&display=swap');
     
     /* ============================================
        BASE Y RESET
@@ -18,7 +18,7 @@ def get_base_css() -> str:
         box-sizing: border-box;
         margin: 0;
         padding: 0;
-        font-family:"Fira Code", monospace !important;
+        font-family:"Roboto", sans-serif !important;
     }
     
     body {
