@@ -2,7 +2,7 @@ import streamlit as st
 from datetime import datetime
 
 
-APP_NAME = "Santos Pegasus AI"
+APP_NAME = "Santos Pegasus AI Agent"
 VERSION = "v2.0.0"
 
 
@@ -15,26 +15,12 @@ def render_footer():
 
     st.markdown("---")
 
-    col1, col2, col3 = st.columns([2, 3, 2])
-
-    with col1:
-        st.caption(f"🤖 **{APP_NAME}**")
+    _, col2, _ = st.columns([3, 2, 3])
 
     with col2:
         st.caption(
-            "⚡ Gemini 2.5 Flash • FastAPI • FAISS • Streamlit"
+            f"© {current_year} **{APP_NAME}** Desarrollado con ❤️ por **Orli Dun**"
         )
-
-    with col3:
-        st.caption(f"© {current_year}")
-
-    st.caption(
-        f"""
-Versión **{VERSION}**
-
-Desarrollado con ❤️ por **Orli Dun**
-"""
-    )
 
 
 # =====================================================
@@ -49,7 +35,7 @@ def render_minimal_footer():
     st.markdown("---")
 
     st.caption(
-        "🤖 Santos Pegasus AI • Gemini 2.5 Flash • FastAPI • FAISS"
+        f"© {current_year} Desarrollado con ❤️ por **Orli Dun**"
     )
 
 

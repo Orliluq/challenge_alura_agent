@@ -1,24 +1,8 @@
-"""
-Sistema de CSS modular para Santos Pegasus AI.
-
-CSS basado en variables, sin duplicación, con:
-- Glassmorphism
-- Gradientes modernos
-- Sombras suaves
-- Bordes redondeados
-- Responsive design
-"""
-
 from typing import Dict
 
 
 def get_base_css() -> str:
-    """
-    Retorna el CSS base de la aplicación.
-    
-    Returns:
-        String con el CSS base
-    """
+  
     return """
     /* ============================================
        FUENTES - Fira Code
@@ -45,13 +29,39 @@ def get_base_css() -> str:
     }
     
     .stApp {
-        background:
-            radial-gradient(circle at top left, rgba(255, 107, 53, 0.24), transparent 24%),
-            radial-gradient(circle at top right, rgba(255, 59, 113, 0.22), transparent 22%),
-            linear-gradient(135deg, var(--bg-main) 0%, #0f172a 100%);
+        background: var(--bg-main);
+        color: var(--text-main);
         color: var(--text-main);
         position: relative;
         overflow-x: hidden;
+        min-height: 100vh;
+    }
+
+    /* Header de Streamlit */
+    .stAppHeader {
+        background: var(--bg-main) !important;
+        border-bottom: 1px solid var(--border) !important;
+    }
+ 
+    .stDecoration {
+        background: var(--bg-main) !important;
+    }
+
+    /* Chat input de Streamlit */
+    .stChatInput {
+        background: var(--bg-card) !important;
+        border: 1px solid var(--border) !important;
+        border-radius: 12px !important;
+    }
+ 
+    .stChatInput textarea {
+        background: transparent !important;
+        color: var(--text-main) !important;
+    }
+ 
+    .stChatInput button {
+        background: var(--primary) !important;
+        color: white !important;
     }
     
     .main .block-container {
@@ -68,12 +78,7 @@ def get_base_css() -> str:
 
 
 def get_sidebar_css() -> str:
-    """
-    Retorna el CSS específico para el sidebar.
-    
-    Returns:
-        String con el CSS del sidebar
-    """
+
     return """
     /* ============================================
        SIDEBAR
@@ -120,12 +125,7 @@ def get_sidebar_css() -> str:
 
 
 def get_hero_css() -> str:
-    """
-    Retorna el CSS para el hero/header.
-    
-    Returns:
-        String con el CSS del hero
-    """
+
     return """
     /* ============================================
        HERO / HEADER
@@ -215,16 +215,12 @@ def get_hero_css() -> str:
         background: var(--bg-card);
         transform: translateY(-2px);
     }
+
 """
 
 
 def get_dashboard_css() -> str:
-    """
-    Retorna el CSS para el dashboard y cards.
-    
-    Returns:
-        String con el CSS del dashboard
-    """
+
     return """
     /* ============================================
        DASHBOARD Y CARDS
@@ -321,12 +317,7 @@ def get_dashboard_css() -> str:
 
 
 def get_chat_css() -> str:
-    """
-    Retorna el CSS para el chat.
-    
-    Returns:
-        String con el CSS del chat
-    """
+
     return """
     /* ============================================
        CHAT
@@ -368,12 +359,7 @@ def get_chat_css() -> str:
 
 
 def get_buttons_css() -> str:
-    """
-    Retorna el CSS para botones.
-    
-    Returns:
-        String con el CSS de botones
-    """
+
     return """
     /* ============================================
        BOTONES
@@ -419,12 +405,7 @@ def get_buttons_css() -> str:
 
 
 def get_metrics_css() -> str:
-    """
-    Retorna el CSS para métricas.
-    
-    Returns:
-        String con el CSS de métricas
-    """
+ 
     return """
     /* ============================================
        MÉTRICAS
@@ -444,12 +425,7 @@ def get_metrics_css() -> str:
 
 
 def get_footer_css() -> str:
-    """
-    Retorna el CSS para el footer.
-    
-    Returns:
-        String con el CSS del footer
-    """
+   
     return """
     /* ============================================
        FOOTER
@@ -472,25 +448,22 @@ def get_footer_css() -> str:
         right: 1.2rem;
         bottom: 1.2rem;
         display: flex;
-        flex-direction: column;
+        flex-direction: row;
         gap: 0.6rem;
         z-index: 999;
     }
     
     .floating-actions button {
         border-radius: 999px !important;
+        width: 40px !important;
+        height: 40px !important;
         box-shadow: 0 10px 26px rgba(255, 107, 53, 0.28) !important;
     }
 """
 
 
 def get_scrollbar_css() -> str:
-    """
-    Retorna el CSS para scrollbars personalizados.
-    
-    Returns:
-        String con el CSS de scrollbars
-    """
+
     return """
     /* ============================================
        SCROLLBARS
@@ -516,12 +489,7 @@ def get_scrollbar_css() -> str:
 
 
 def get_utilities_css() -> str:
-    """
-    Retorna clases utilitarias CSS.
-    
-    Returns:
-        String con las clases utilitarias
-    """
+ 
     return """
     /* ============================================
        UTILIDADES
@@ -564,12 +532,7 @@ def get_utilities_css() -> str:
 
 
 def get_responsive_css() -> str:
-    """
-    Retorna el CSS responsive.
-    
-    Returns:
-        String con el CSS responsive
-    """
+
     return """
     /* ============================================
        RESPONSIVE
@@ -632,19 +595,17 @@ def get_responsive_css() -> str:
             border-radius: 16px;
         }
     }
+
+    @media (max-width: 640px) {
+        .floating-actions {
+            flex-direction: column;
+        }
+    }
 """
 
 
 def get_complete_css(theme: Dict[str, str]) -> str:
-    """
-    Retorna el CSS completo combinando todos los módulos.
-    
-    Args:
-        theme: Configuración del tema
-        
-    Returns:
-        String con el CSS completo
-    """
+  
     from .theme import get_css_variables
     from .animations import (
         get_animations_css,

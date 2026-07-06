@@ -1,9 +1,3 @@
-"""
-Componente de métricas para Santos Pegasus AI.
-
-Cards y visualizaciones de métricas de forma modular.
-"""
-
 import streamlit as st
 from typing import Dict, List, Tuple
 from .icons import AppIcons, Icons

@@ -1,27 +1,8 @@
-"""
-Sistema de temas centralizado para Santos Pegasus AI.
-
-Implementa temas light/dark con identidad visual consistente:
-- 💜 Creatividad
-- 💙 Tecnología  
-- 🧡 Energía
-- 💛 Cercanía
-- 💚 Innovación
-"""
-
 from typing import Dict
 
 
 def get_theme_config(mode: str = "dark") -> Dict[str, str]:
-    """
-    Retorna la configuración completa del tema.
-    
-    Args:
-        mode: "dark" o "light"
-        
-    Returns:
-        Diccionario con todas las variables CSS del tema
-    """
+
     if mode == "light":
         return _get_light_theme()
     
@@ -107,15 +88,7 @@ def _get_dark_theme() -> Dict[str, str]:
 
 
 def get_css_variables(theme: Dict[str, str]) -> str:
-    """
-    Genera las variables CSS desde la configuración del tema.
-    
-    Args:
-        theme: Configuración del tema
-        
-    Returns:
-        String con las variables CSS formateadas
-    """
+
     return f"""
     :root {{
         --primary: {theme['primary']};
@@ -143,15 +116,7 @@ def get_css_variables(theme: Dict[str, str]) -> str:
 
 
 def get_streamlit_theme_config(mode: str = "dark") -> Dict[str, str]:
-    """
-    Retorna configuración compatible con Streamlit theme config.
-    
-    Args:
-        mode: "dark" o "light"
-        
-    Returns:
-        Diccionario con configuración de tema de Streamlit
-    """
+
     theme = get_theme_config(mode)
     
     return {

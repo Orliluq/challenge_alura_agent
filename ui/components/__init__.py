@@ -1,9 +1,3 @@
-"""
-Módulo de componentes para Santos Pegasus AI.
-
-Exporta todos los componentes de UI.
-"""
-
 from .header import render_header, render_compact_header
 from .sidebar import render_sidebar
 from .chat import (

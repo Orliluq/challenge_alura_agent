@@ -1,4 +1,4 @@
-# 🤖 Santos Pegasus AI Assistant
+# 🤖 Santos Pegasus AI Agent
 
 > **Asistente Inteligente basado en Gemini 2.5 Flash + RAG para Consulta de Documentación Corporativa**
 
@@ -31,7 +31,7 @@
 
 ## 🎯 **Descripción**
 
-**Santos Pegasus AI Assistant** es un sistema avanzado de **Retrieval-Augmented Generation (RAG)** que permite consultar la documentación interna de **Santos Pegasus Soluciones** utilizando inteligencia artificial de última generación.
+**Santos Pegasus AI Agent** es un sistema avanzado de **Retrieval-Augmented Generation (RAG)** que permite consultar la documentación interna de **Santos Pegasus Soluciones** utilizando inteligencia artificial de última generación.
 
 ### **🎯 Objetivo Principal**
 
@@ -651,7 +651,7 @@ uvicorn app.api:app --reload --log-level debug
 
 **⭐ Si te gusta este proyecto, dale una estrella! ⭐**
 
-**🤖 Santos Pegasus AI Assistant - Powered by Gemini 2.5 Flash + RAG**
+**🤖 Santos Pegasus AI Agent - Powered by Gemini 2.5 Flash + RAG**
 
 *Desarrollado con ❤️ por Orli Dun*
 

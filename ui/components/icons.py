@@ -1,24 +1,8 @@
-"""
-Sistema de iconos para Santos Pegasus AI.
-
-Utiliza emojis nativos para máxima compatibilidad con Streamlit.
-Sin SVG incrustados, sin dependencias externas.
-"""
-
 from typing import Dict
 
 
 class Icons:
-    """
-    Clase centralizada para todos los iconos de la aplicación.
-    
-    Usa emojis nativos para:
-    - Máxima compatibilidad con Streamlit
-    - Sin dependencias externas
-    - Rendimiento óptimo
-    - Consistencia visual
-    """
-    
+
     # ============================================
     # ICONOS PRINCIPALES
     # ============================================
@@ -33,7 +17,7 @@ class Icons:
     # DOCUMENTOS Y ARCHIVOS
     # ============================================
     
-    DOCUMENT = "📄"
+    DOCUMENTS = "📄"
     FILE = "📁"
     FOLDER = "📂"
     BOOK = "📚"
@@ -204,7 +188,7 @@ def get_icon(name: str) -> str:
     Retorna un icono por su nombre.
     
     Args:
-        name: Nombre del icono (ej: "APP", "DOCUMENT", "SUCCESS")
+        name: Nombre del icono (ej: "APP", "DOCUMENTS", "SUCCESS")
         
     Returns:
         Emoji correspondiente al icono solicitado
@@ -252,7 +236,7 @@ def get_theme_icon(theme: str) -> str:
 
 class AppIcons:
     """
-    Iconos específicos para Santos Pegasus AI.
+    Iconos específicos para Santos Pegasus IA.
     """
     
     # Branding

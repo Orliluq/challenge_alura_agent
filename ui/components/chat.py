@@ -1,9 +1,3 @@
-"""
-Componente chat para Santos Pegasus AI.
-
-Sistema de chat modular inspirado en ChatGPT/Claude.
-"""
-
 from typing import Dict, List
 import streamlit as st
 from .icons import Icons, AppIcons
@@ -30,10 +24,9 @@ def render_empty_state():
     st.markdown(
         f"""
         <div style="text-align:center; padding:5rem 1rem; opacity:.85;">
-            <h2>{AppIcons.LOGO} Santos Pegasus AI</h2>
+            <h2>{AppIcons.LOGO} Santos Pegasus IA</h2>
             <p style="font-size:18px;">
-                Pregunta cualquier cosa sobre la documentación
-                de Santos Pegasus Soluciones.
+                Escribe tu pregunta y te ayudaré a encontrar la información que necesitas.
             </p>
         </div>
         """,
@@ -74,7 +67,7 @@ def render_sources(message: Dict):
         return
     
     with st.expander(
-        f"{AppIcons.DOCUMENT} Documentos utilizados ({len(sources)})",
+        f"{AppIcons.DOCUMENTS} Documentos utilizados ({len(sources)})",
         expanded=False,
     ):
         for source in sources:

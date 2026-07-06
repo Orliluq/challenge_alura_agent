@@ -1,9 +1,3 @@
-"""
-Componente de acciones flotantes para Santos Pegasus AI.
-
-Botones de acción rápida posicionados de forma flotante.
-"""
-
 import streamlit as st
 from typing import Callable, List, Tuple
 from .icons import AppIcons

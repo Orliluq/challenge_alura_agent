@@ -1,23 +1,8 @@
-"""
-Sistema de animaciones CSS para Santos Pegasus AI.
-
-Animaciones suaves y modernas inspiradas en:
-- ChatGPT
-- Claude
-- Linear
-- Vercel
-"""
-
 from typing import Dict
 
 
 def get_animations_css() -> str:
-    """
-    Retorna todas las animaciones CSS de la aplicación.
-    
-    Returns:
-        String con las keyframes de animaciones
-    """
+
     return """
     /* ============================================
        ANIMACIONES PRINCIPALES
@@ -133,12 +118,7 @@ def get_animations_css() -> str:
 
 
 def get_background_animations() -> str:
-    """
-    Retorna animaciones específicas para el fondo.
-    
-    Returns:
-        String con animaciones de fondo
-    """
+
     return """
     /* ============================================
        ANIMACIONES DE FONDO
@@ -174,12 +154,7 @@ def get_background_animations() -> str:
 
 
 def get_animation_classes() -> str:
-    """
-    Retorna clases CSS para aplicar animaciones.
-    
-    Returns:
-        String con las clases de animación
-    """
+
     return """
     /* ============================================
        CLASES DE ANIMACIÓN
@@ -231,12 +206,7 @@ def get_animation_classes() -> str:
 
 
 def get_transition_classes() -> str:
-    """
-    Retorna clases CSS para transiciones suaves.
-    
-    Returns:
-        String con las clases de transición
-    """
+
     return """
     /* ============================================
        TRANSICIONES
@@ -275,12 +245,7 @@ def get_transition_classes() -> str:
 
 
 def get_hover_effects() -> str:
-    """
-    Retorna efectos hover modernos.
-    
-    Returns:
-        String con los efectos hover
-    """
+
     return """
     /* ============================================
        EFECTOS HOVER
@@ -323,12 +288,7 @@ def get_hover_effects() -> str:
 
 
 def get_loading_states() -> str:
-    """
-    Retorna estados de carga y skeleton loading.
-    
-    Returns:
-        String con los estados de carga
-    """
+
     return """
     /* ============================================
        ESTADOS DE CARGA
@@ -369,12 +329,7 @@ def get_loading_states() -> str:
 
 
 def get_responsive_animations() -> str:
-    """
-    Retorna animaciones adaptativas para diferentes dispositivos.
-    
-    Returns:
-        String con las animaciones responsivas
-    """
+
     return """
     /* ============================================
        ANIMACIONES RESPONSIVAS

@@ -1,9 +1,3 @@
-"""
-Módulo de estilos para Santos Pegasus AI.
-
-Exporta todos los submódulos del sistema de estilos.
-"""
-
 from .theme import (
     get_theme_config,
     get_css_variables,

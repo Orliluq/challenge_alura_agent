@@ -1,9 +1,3 @@
-"""
-Componente sidebar para Santos Pegasus AI.
-
-Sidebar profesional con métricas, acciones y selector de tema.
-"""
-
 import streamlit as st
 from typing import Callable, Dict
 from .icons import AppIcons, Icons, get_theme_icon
@@ -19,11 +13,6 @@ def render_sidebar(
     """
     Sidebar principal de la aplicación.
     
-    Args:
-        metrics: Diccionario con métricas
-        on_clear_chat: Callback para limpiar chat
-        on_export_markdown: Callback para exportar Markdown
-        on_export_pdf: Callback para exportar PDF
     """
     with st.sidebar:
         _render_logo_section()
@@ -47,8 +36,8 @@ def _render_logo_section():
     st.markdown(
         f"""
         <div class="sidebar-hero">
-            <h3>{AppIcons.LOGO} Santos Pegasus AI</h3>
-            <p>Asistente vivo para consultar documentación con estilo moderno.</p>
+            <h3>{AppIcons.LOGO} Santos Pegasus IA</h3>
+            <p>Agente IA para consultar documentación.</p>
         </div>
         """,
         unsafe_allow_html=True,
@@ -63,7 +52,7 @@ def _render_theme_selector():
     theme_icon = get_theme_icon(current_theme)
     
     is_light = st.toggle(
-        f"{theme_icon} Modo claro",
+        f"{theme_icon}",
         value=current_theme == "light",
     )
     
@@ -124,6 +113,5 @@ def _render_footer():
         f"""
         {Icons.VERSION} Versión 2.0
         
-        Desarrollado por Orli Dun
         """
     )

@@ -1,9 +1,3 @@
-"""
-Santos Pegasus AI - Aplicación principal Streamlit.
-
-Interfaz moderna y modular para asistente RAG con Gemini 2.5 Flash.
-"""
-
 import streamlit as st
 import sys
 from pathlib import Path
@@ -26,7 +20,8 @@ from ui.components import (
     render_floating_actions,
     AppIcons,
 )
-from ui.styles import apply_custom_styles
+from ui.styles.theme import get_theme_config
+from ui.styles.css import get_complete_css
 from ui.export import download_markdown, download_pdf
 
 
@@ -35,7 +30,7 @@ from ui.export import download_markdown, download_pdf
 # ============================================
 
 st.set_page_config(
-    page_title="Santos Pegasus AI | Asistente RAG",
+    page_title="Santos Pegasus IA | Asistente RAG",
     page_icon="✨",
     layout="wide",
     initial_sidebar_state="expanded"
@@ -108,12 +103,7 @@ def export_chat_pdf():
 # ============================================
 
 def process_question(question: str):
-    """
-    Procesa una pregunta del usuario.
-    
-    Args:
-        question: Pregunta del usuario
-    """
+
     # Agregar mensaje del usuario
     add_user_message(question)
     
@@ -138,7 +128,7 @@ def process_question(question: str):
         
         # Mostrar fuentes si existen
         if sources:
-            with st.expander(f"{AppIcons.DOCUMENT} Documentos utilizados"):
+            with st.expander(f"{AppIcons.DOCUMENTS} Documentos utilizados"):
                 for source in sources:
                     st.write("•", source)
             
@@ -161,7 +151,10 @@ def main():
     initialize_session_state()
     
     # Aplicar estilos
-    apply_custom_styles()
+    mode = st.session_state.get("theme_mode", "dark")
+    theme = get_theme_config(mode)
+    css = get_complete_css(theme)
+    st.markdown(css, unsafe_allow_html=True)
     
     # Renderizar header
     render_header()
@@ -200,10 +193,7 @@ def main():
     st.markdown(
         f"""
         <div class="footer-card">
-            <strong>Santos Pegasus AI Assistant</strong> | 
-            Powered by Gemini 2.5 Flash + RAG | 
-            Construido con FastAPI + Streamlit | 
-            Desarrollado por Orli Dun
+            Powered by Gemini 2.5 Flash + RAG
         </div>
         """,
         unsafe_allow_html=True,

@@ -1,10 +1,3 @@
-"""
-Componente dashboard para Santos Pegasus AI.
-
-Dashboard principal con cards y métricas.
-Sin HTML inline, usando componentes modulares.
-"""
-
 import streamlit as st
 from typing import Dict
 from .icons import AppIcons
@@ -18,7 +11,7 @@ def render_dashboard(metrics: Dict):
     Args:
         metrics: Diccionario con métricas de la aplicación
     """
-    st.markdown("## 📊 Panel de actividad")
+    st.markdown("## 📊 Panel")
     render_app_metrics(metrics)
     st.markdown("")
     render_system_status()
@@ -31,8 +24,8 @@ def render_welcome():
     st.markdown(
         f"""
         <div class="welcome-card">
-            <h2>👋 Bienvenido</h2>
-            <p>Pregunta cualquier cosa relacionada con la documentación de <strong>Santos Pegasus Soluciones</strong>.</p>
+            <h2>👋 Bienvenido/a</h2>
+            <p>Escribe tu pregunta y te ayudaré a encontrar la información que necesitas.</p>
             <p>Puedes consultar:</p>
             <ul>
                 <li>📄 Procesos</li>

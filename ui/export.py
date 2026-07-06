@@ -40,7 +40,7 @@ def export_to_markdown(messages: List[Dict]) -> str:
         markdown += "---\n\n"
     
     markdown += f"""
-*Exportado desde Santos Pegasus AI Assistant*
+*Exportado desde Santos Pegasus AI Agent*
 *Generado automáticamente el {timestamp}*
 """
     
@@ -48,15 +48,7 @@ def export_to_markdown(messages: List[Dict]) -> str:
 
 
 def export_to_pdf(messages: List[Dict]) -> str:
-    """
-    Exporta el historial de chat a formato PDF (como Markdown para imprimir)
-    
-    Args:
-        messages: Lista de mensajes del chat
-        
-    Returns:
-        String con el contenido formateado para PDF
-    """
+
     # Para PDF, usamos el mismo formato Markdown pero con estilos adicionales
     markdown = export_to_markdown(messages)
     
@@ -77,13 +69,7 @@ def export_to_pdf(messages: List[Dict]) -> str:
 
 
 def download_markdown(messages: List[Dict], filename: str = None):
-    """
-    Genera un botón de descarga para el archivo Markdown
-    
-    Args:
-        messages: Lista de mensajes del chat
-        filename: Nombre del archivo (opcional)
-    """
+ 
     if not filename:
         filename = f"santos_pegasus_chat_{datetime.now().strftime('%Y%m%d_%H%M%S')}.md"
     
@@ -99,16 +85,7 @@ def download_markdown(messages: List[Dict], filename: str = None):
 
 
 def download_pdf(messages: List[Dict], filename: str = None):
-    """
-    Genera un botón de descarga para el archivo PDF (como Markdown)
-    
-    Nota: Para PDF real, se necesitaría una librería como weasyprint o reportlab
-    Por ahora, exportamos como Markdown formateado para impresión
-    
-    Args:
-        messages: Lista de mensajes del chat
-        filename: Nombre del archivo (opcional)
-    """
+
     if not filename:
         filename = f"santos_pegasus_chat_{datetime.now().strftime('%Y%m%d_%H%M%S')}.md"
     
@@ -124,12 +101,7 @@ def download_pdf(messages: List[Dict], filename: str = None):
 
 
 def copy_to_clipboard(messages: List[Dict]):
-    """
-    Copia el contenido del chat al portapapeles
-    
-    Args:
-        messages: Lista de mensajes del chat
-    """
+
     markdown_content = export_to_markdown(messages)
     
     st.code(
@@ -142,16 +114,7 @@ def copy_to_clipboard(messages: List[Dict]):
 
 
 def format_source_with_metadata(source: str, metadata: Dict = None) -> str:
-    """
-    Formatea una fuente con metadatos adicionales
-    
-    Args:
-        source: Nombre del documento fuente
-        metadata: Metadatos adicionales (página, sección, etc.)
-        
-    Returns:
-        String formateado con la información completa
-    """
+
     if metadata:
         page = metadata.get("page", "")
         section = metadata.get("section", "")
